@@ -84,3 +84,24 @@ body {
     color: white;
 }
 
+.kanban-container {
+    display: flex; 
+    gap: 20px;
+}
+
+
+@media (max-width: 768px) {
+    
+    .kanban-container {
+        flex-direction: column;   
+        grid-template-columns: 1fr;
+    }
+    .header-input-section {
+        padding: 10px;
+    }
+
+    input[type="text"], select, button {
+        width: 100%;
+        margin-bottom: 10px; 
+    }
+}
