@@ -1,0 +1,86 @@
+body {
+    font-family: Arial, sans-serif;
+    background: #f3eff8;
+    margin: 0;
+    padding: 20px;
+}
+
+.title {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.task-form {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 30px;
+}
+
+.task-form input, .task-form select {
+    padding: 8px;
+    font-size: 16px;
+}
+
+.task-form button {
+    padding: 8px 14px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.kanban-container {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+}
+
+.kanban-column {
+    background: rgb(129, 127, 250);
+    padding: 15px;
+    width: 300px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px #befffe;
+}
+
+.kanban-list {
+    min-height: 200px;
+    padding: 10px;
+    background: #fcfafa;
+    border-radius: 8px;
+}
+
+.task-card {
+    background: rgb(219, 246, 254);
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 6px;
+    box-shadow: 0 0 5px #888;
+    cursor: grab;
+}
+
+.task-card:hover {
+    background: #fcfeff;
+}
+
+.dragging {
+    opacity: 0.5;
+}
+
+.delete-btn {
+    float: right;
+    background: fixed;
+    border: none;
+    font-size: 18px;
+    cursor: pointer;
+    color: black;
+}
+
+.delete-btn:hover {
+    color: rgb(23, 214, 55);
+}
+
+.kanban-column h2 {
+    text-align: center;
+    color: white;
+}
+

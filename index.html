@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Kanban Board</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+
+  <body>
+    <h1 class="title">Kanban Board!</h1>
+
+    <div class="task-form">
+      <input type="text" id="taskinput" placeholder="Tulis nama tugas..." />
+      <select id="statusinput">
+        <option value="todo">To Do</option>
+        <option value="inprogress">In Progress</option>
+        <option value="done">Done</option>
+      </select>
+      <button id="bikinibotton">Tambah</button>
+    </div>
+
+    <div class="kanban-container">
+      <div class="kanban-column">
+        <h2>To Do:</h2>
+        <div class="kanban-list" id="todo-list"></div>
+      </div>
+
+      <div class="kanban-column">
+        <h2>In Progress:</h2>
+        <div class="kanban-list" id="inprogress-list"></div>
+      </div>
+
+      <div class="kanban-column">
+        <h2>Done:</h2>
+        <div class="kanban-list" id="done-list"></div>
+      </div>
+    </div>
+
+    <script src="script.js"></script>
+  </body>
+</html>
