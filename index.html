@@ -1,43 +1,188 @@
 <!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Kanban Board</title>
-    <link rel="stylesheet" href="style.css" />
-  </head>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Money Manager Ultimate</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
 
-  <body>
-    <h1 class="title">Kanban Board!</h1>
+    <div class="app-container">
+        <header>
+            <div class="header-left">
+                <h1><i class="fa-solid fa-wallet"></i> Manajer Keuangan Pribadi</h1>
+                <small>Kelola uangmu, atur hidupmu.</small>
+            </div>
+            <div class="header-controls">
+                <input type="month" id="month-filter" class="glass-input">
+                <button id="export-btn" class="btn-icon" title="Download Laporan Excel/CSV">
+                    <i class="fa-solid fa-file-csv"></i>
+                </button>
+                <button id="reset-btn" class="btn-icon danger" title="Reset Data">
+                    <i class="fa-solid fa-trash-can"></i>
+                </button>
+            </div>
+        </header>
 
-    <div class="task-form">
-      <input type="text" id="taskinput" placeholder="Tulis nama tugas..." />
-      <select id="statusinput">
-        <option value="todo">To Do</option>
-        <option value="inprogress">In Progress</option>
-        <option value="done">Done</option>
-      </select>
-      <button id="bikinibotton">Tambah</button>
-    </div>
+        <main>
+            <section class="summary-container">
+                <div class="summary-card income">
+                    <h3>Pemasukan</h3>
+                    <div class="amount" id="total-income">Rp 0</div>
+                    <i class="fa-solid fa-arrow-trend-up icon-bg"></i>
+                </div>
+                <div class="summary-card expense">
+                    <h3>Pengeluaran</h3>
+                    <div class="amount" id="total-expense">Rp 0</div>
+                    <i class="fa-solid fa-arrow-trend-down icon-bg"></i>
+                </div>
+                <div class="summary-card balance">
+                    <h3>Sisa Saldo</h3>
+                    <div class="amount" id="balance">Rp 0</div>
+                    <i class="fa-solid fa-scale-balanced icon-bg"></i>
+                </div>
+            </section>
 
-    <div class="kanban-container">
-      <div class="kanban-column">
-        <h2>To Do:</h2>
-        <div class="kanban-list" id="todo-list"></div>
-      </div>
+            <section class="saving-goal-section glass-panel">
+                <h2><i class="fa-solid fa-piggy-bank"></i> Target Tabungan Bulan Ini</h2>
+                <div class="saving-content">
+                    <div class="saving-info">
+                        <div class="form-control-inline">
+                            <label>Target Tabungan (Rp):</label>
+                            <div class="input-with-button">
+                                <input type="text" id="saving-goal-input" placeholder="0" class="saving-input" autocomplete="off">
+                                <button type="button" id="set-goal-btn" class="btn btn-small btn-primary">Atur Target</button>
+                            </div>
+                        </div>
+                        <div class="saving-stats">
+                            <p>Target: <span id="goal-target" class="bold-stat">Rp 0</span></p>
+                            <p>Telah Dikontribusikan: <span id="goal-achieved" class="bold-stat saving-text">Rp 0</span></p>
+                            <p>Kekurangan: <span id="goal-remaining" class="bold-stat expense-text">Rp 0</span></p>
+                        </div>
+                    </div>
+                    <div class="saving-progress-box">
+                        <div class="progress-bar-container">
+                            <div class="progress-bar" id="saving-progress-bar"></div>
+                            <span id="progress-percent" class="progress-percent">0%</span>
+                        </div>
+                        <p id="progress-message" class="progress-message"></p>
+                    </div>
+                </div>
+            </section>
+            <section class="charts-section glass-panel">
+                <h2><i class="fa-solid fa-chart-line"></i> Analisis Visual</h2>
+                <div class="charts-grid">
+                    <div class="chart-box">
+                        <h4>Pengeluaran per Kategori</h4>
+                        <canvas id="expenseChart"></canvas>
+                    </div>
+                    <div class="chart-box">
+                        <h4>Arus Kas (Operasional) Bulan Ini</h4>
+                        <canvas id="trendChart"></canvas>
+                    </div>
+                </div>
+            </section>
 
-      <div class="kanban-column">
-        <h2>In Progress:</h2>
-        <div class="kanban-list" id="inprogress-list"></div>
-      </div>
+            <div class="content-layout">
+                <section class="form-section glass-panel">
+                    <h2><i class="fa-solid fa-circle-plus"></i> Transaksi Baru</h2>
+                    <form id="transaction-form">
+                        <div class="form-control">
+                            <label>Deskripsi</label>
+                            <input type="text" id="text" placeholder="Cth: Makan Siang..." required>
+                        </div>
+                        
+                        <div class="form-control">
+                            <label>Jumlah (Rp)</label>
+                            <div class="input-with-icon-group">
+                                <input type="text" id="amount" placeholder="0" required autocomplete="off">
+                                <button type="button" id="calculator-btn" class="input-icon-btn" title="Buka Kalkulator">
+                                    <i class="fa-solid fa-calculator"></i>
+                                </button>
+                                <div id="calculator-popup" class="calculator-popup glass-panel-dark" style="display:none;">
+                                    <input type="text" id="calc-display" class="calc-display" value="" readonly>
+                                    <div class="calc-buttons">
+                                        <button type="button" class="btn-calc btn-action" data-value="C">C</button>
+                                        <button type="button" class="btn-calc btn-op" data-value="(">(</button>
+                                        <button type="button" class="btn-calc btn-op" data-value=")">)</button>
+                                        <button type="button" class="btn-calc btn-op" data-value="/">/</button>
 
-      <div class="kanban-column">
-        <h2>Done:</h2>
-        <div class="kanban-list" id="done-list"></div>
-      </div>
+                                        <button type="button" class="btn-calc" data-value="7">7</button>
+                                        <button type="button" class="btn-calc" data-value="8">8</button>
+                                        <button type="button" class="btn-calc" data-value="9">9</button>
+                                        <button type="button" class="btn-calc btn-op" data-value="*">x</button>
+
+                                        <button type="button" class="btn-calc" data-value="4">4</button>
+                                        <button type="button" class="btn-calc" data-value="5">5</button>
+                                        <button type="button" class="btn-calc" data-value="6">6</button>
+                                        <button type="button" class="btn-calc btn-op" data-value="-">-</button>
+
+                                        <button type="button" class="btn-calc" data-value="1">1</button>
+                                        <button type="button" class="btn-calc" data-value="2">2</button>
+                                        <button type="button" class="btn-calc" data-value="3">3</button>
+                                        <button type="button" class="btn-calc btn-op" data-value="+">+</button>
+
+                                        <button type="button" class="btn-calc" data-value="00">00</button>
+                                        <button type="button" class="btn-calc" data-value="0">0</button>
+                                        <button type="button" class="btn-calc" data-value=".">.</button>
+                                        <button type="button" class="btn-calc btn-result" data-value="=">=</button>
+                                    </div>
+                                    <button type="button" id="calc-apply-btn" class="btn btn-small" style="margin-top:10px;">Gunakan Hasil</button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="form-control">
+                            <label>Tanggal</label>
+                            <input type="date" id="date" required>
+                        </div>
+
+                        <div class="form-control">
+                            <label>Tipe & Kategori</label>
+                            <div class="row-group">
+                                <select id="type-select" onchange="updateCategories()">
+                                    <option value="expense">Pengeluaran 🔴</option>
+                                    <option value="income">Pemasukan 🟢</option>
+                                    <option value="saving">Tabungan 💰</option>
+                                </select>
+                                <select id="category">
+                                </select>
+                            </div>
+                        </div>
+
+                        <input type="hidden" id="edit-id">
+                        
+                        <button class="btn" type="submit" id="submit-btn">Simpan</button>
+                        <button class="btn btn-cancel" type="button" id="cancel-edit" style="display:none;">Batal</button>
+                    </form>
+                </section>
+
+                <section class="history-section glass-panel">
+                    <h2><i class="fa-solid fa-clock-rotate-left"></i> Riwayat Transaksi</h2>
+                    <div class="history-list-container">
+                        <ul id="transaction-list">
+                        </ul>
+                    </div>
+                </section>
+            </div>
+
+            <section class="unique-feature glass-panel">
+                 <div class="feature-content">
+                    <h3><i class="fa-solid fa-robot"></i> Komentar AI</h3>
+                    <div id="persona-content" style="margin-top:10px;">
+                        <span id="persona-icon" style="font-size: 30px;">🤖</span>
+                        <span id="persona-desc" style="font-weight: 600;">Analisis belum tersedia.</span>
+                    </div>
+                </div>
+            </section>
+
+        </main>
     </div>
 
     <script src="script.js"></script>
-  </body>
-</html>
-
+</body>
+  </html>
